@@ -20,15 +20,15 @@ def s_string(var_string,crypt_string):
 
 
 sql = " SELECT nf,cfop,cpf "
-sql = sql + " FROM <db>.<table_nf> WHERE dt_foto = " + (datetime.now() - timedelta(days=dias_ant)).strftime('%Y%m%d');
+sql = sql + " FROM <db>.<table_nf> WHERE dt = " + (datetime.now() - timedelta(days=dias_ant)).strftime('%Y%m%d');
 _recordsetA = sqlContext.sql(sql)
 
 sql = " SELECT nf as nfa,produto "
-sql = sql + " FROM p_urm_db.<table_produto> WHERE dt_foto = " + (datetime.now() - timedelta(days=dias_ant)).strftime('%Y%m%d');
+sql = sql + " FROM <db>.<table_produto> WHERE dt = " + (datetime.now() - timedelta(days=dias_ant)).strftime('%Y%m%d');
 _recordsetZ = sqlContext.sql(sql)
 
 if _recordsetA.count() > 0 and (_recordsetZ.count() > 0 or _INICIAL):
-	_sql = _recordsetAtual.join(_recordsetA,_recordsetA.nf == _recordsetZ.nfa,'left_outer')
+	_sql = _recordsetA.join(_recordsetZ,_recordsetZ.nf == _recordsetA.nfa,'left_outer')
 	
 	recordset = _sql.select("nf","cfop","cpf","produto").collect()
 	
